@@ -12,6 +12,8 @@ BOT_NAME = 'scrapy_learning'
 SPIDER_MODULES = ['scrapy_learning.spiders']
 NEWSPIDER_MODULE = 'scrapy_learning.spiders'
 
+LOG_FILE = "ptt_crawl_log.log"
+LOG_LEVEL = "ERROR"  #特別注意這邊一定要大寫
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.92 Safari/537.36'
