@@ -1,34 +1,40 @@
+# -*- coding: utf-8 -*-
 import scrapy
 import requests
 from lxml import etree
 import re
 import pandas as pd
-
+from scrapy.exceptions import CloseSpider
 
 
 class PttStockSpider(scrapy.Spider):
+    count_page = 1
     name = 'ptt_stock'
     allowed_domains = ['www.ptt.cc']
     start_urls = ['https://www.ptt.cc/bbs/Stock/index.html']
 
     def parse(self, response):
-        pass
-        # res_x = response.text
-        # origin_xpath = etree.HTML(res_x)
-        # title_url_list = origin_xpath.xpath('//*[@id="main-container"]/div[2]/div/div[2]/a/@href')
-        # for i in title_url_list:
+        
+        res_x = response.text
+        origin_xpath = etree.HTML(res_x)
+        title_url_list = origin_xpath.xpath('//*[@id="main-container"]/div[2]/div/div[2]/a/@href')
+        for i in title_url_list:
 
-        #     title_url = 'https://www.ptt.cc/' + i
+            title_url = 'https://www.ptt.cc/' + i
 
-        #     # 進入文章內獲取內文資訊
-        #     yield scrapy.Request(title_url, self.parse_content)
-        #     pass
+            # 進入文章內獲取內文資訊
+            yield scrapy.Request(title_url, self.parse_content)
+            pass
 
-        # last_page_url = origin_xpath.xpath("//a[@class='btn wide'][contains(.,'上頁')]/@href")
+        last_page_url = origin_xpath.xpath("//a[@class='btn wide'][contains(.,'上頁')]/@href")
 
-        # new_url = 'https://www.ptt.cc' + last_page_url[0]
-        # if new_url != "https://www.ptt.cc/bbs/Stock/index5113.html":
-        #     yield scrapy.Request(new_url, callback = self.parse)
+        new_url = 'https://www.ptt.cc' + last_page_url[0]
+        if  (last_page_url) and (self.count_page < 4):
+            self.count_page += 1
+        else:
+            raise CloseSpider('close it')
+        print(last_page_url)
+        yield scrapy.Request(new_url,  self.parse)
 
     def translation_date(self,date):#日期格式轉換的funtion
         date_dict = {"Jan":'01',"Feb":'02',"Mar":'03',"Apr":'04',"May":'05',"Jun":'06',"Jul":'07',"Aug":'08',"Sep":'09',"Oct":'10',"Nov":'11',"Dec":'12'}
@@ -48,7 +54,11 @@ class PttStockSpider(scrapy.Spider):
 
         res = etree.HTML(response.text)
         titlename = res.xpath('//*[@id="main-content"]/div[3]/span[2]/text()')
-        titlename = titlename[0] #使爬下來的list轉為字串
+        if type(titlename) is list:
+            titlename = titlename[0]
+        else:
+            titlename = list(titlename)[0]
+
         time = res.xpath('//*[@id="main-content"]/div[4]/span[2]/text()')
         time = self.translation_date(time)
         content = res.xpath('//*[@id="main-content"]/text()')
@@ -59,9 +69,9 @@ class PttStockSpider(scrapy.Spider):
         new_comments = [new_comments[i].replace('\n', ' ') for i in range(len(new_comments))]
         new_comments = ','.join(new_comments)
 
-            # sql = "insert into ptt_sql.ptt_movie(ID,Title,Date,Content,Comments) values(%s,%s,%s,%s,%s)"
-            # val = (ptt_id,titlename,time,content,new_comments)
-            # ptt_id += 1
+        # sql = "insert into ptt_sql.ptt_movie(ID,Title,Date,Content,Comments) values(%s,%s,%s,%s,%s)"
+        # val = (ptt_id,titlename,time,content,new_comments)
+        # ptt_id += 1
 
         NewsScraperItem = {
             "post_title": titlename,

@@ -15,6 +15,10 @@ NEWSPIDER_MODULE = 'scrapy_learning.spiders'
 LOG_FILE = "ptt_crawl_log.log"
 LOG_LEVEL = "ERROR"  #特別注意這邊一定要大寫
 
+MYSQL_HOST = 'localhost'  #改成您的Mysql主機IP
+MYSQL_DB = 'ptt'           #改成您的Mysql資料庫
+MYSQL_USER = 'root'       #改成您的Mysql資料庫使用者帳號
+MYSQL_PASS = 'root'           #改成您的Mysql資料庫使用者密碼
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.92 Safari/537.36'
 
@@ -52,9 +56,12 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'scrapy_learning.middlewares.ScrapyLearningDownloaderMiddleware': 543,
-#}
+ROTATING_PROXY_LIST_PATH = '/path/my_proxies.txt'
+ 
+DOWNLOADER_MIDDLEWARES = {
+    'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+    'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -65,7 +72,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'scrapy_learning.pipelines.ScrapyLearningPipeline': 300,
+   'scrapy_learning.pipelines.PttPipeline': 300,
    'scrapy_learning.pipelines.CsvPipeline': 500,
 }
 
