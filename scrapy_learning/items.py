@@ -5,6 +5,7 @@
 
 import scrapy
 
+
 class NewsScraperItem(scrapy.Item):
     post_title = scrapy.Field()
     post_date = scrapy.Field()
@@ -26,3 +27,4 @@ class ScrapyLearningItem(scrapy.Item):
     # name = scrapy.Field()
     pass
 
+# lt=SkquSy0qs

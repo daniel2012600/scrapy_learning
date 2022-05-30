@@ -15,6 +15,12 @@ NEWSPIDER_MODULE = 'scrapy_learning.spiders'
 LOG_FILE = "ptt_crawl_log.log"
 LOG_LEVEL = "ERROR"  #特別注意這邊一定要大寫
 
+# MONGODB CONFIG
+MONGODB_URI = "mongodb+srv://root:root@cluster0.kkxyl1t.mongodb.net/test"
+MONGODB_DB = "test_scrapy"
+
+
+# MYSQL CONFIG
 MYSQL_HOST = 'localhost'  #改成您的Mysql主機IP
 MYSQL_DB = 'ptt'           #改成您的Mysql資料庫
 MYSQL_USER = 'root'       #改成您的Mysql資料庫使用者帳號
@@ -56,7 +62,7 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-ROTATING_PROXY_LIST_PATH = '/path/my_proxies.txt'
+# ROTATING_PROXY_LIST_PATH = '/path/my_proxies.txt'
  
 DOWNLOADER_MIDDLEWARES = {
     'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
@@ -72,8 +78,8 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'scrapy_learning.pipelines.PttPipeline': 300,
-   'scrapy_learning.pipelines.CsvPipeline': 500,
+#    'scrapy_learning.pipelines.PttPipeline': 300,
+   'scrapy_learning.pipelines.MongoDBPipeline': 500,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

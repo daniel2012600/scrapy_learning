@@ -1,2 +1,9 @@
-a = ['[新聞] 超級航運周又成割韭派對？老手兩指標找']
-print(a[0])
+# -*- coding: utf-8 -*-
+import pymongo
+
+myclient = pymongo.MongoClient("mongodb+srv://root:root@cluster0.kkxyl1t.mongodb.net/test")
+mydb = myclient["test_scrapy"]
+mycol = mydb["test1"]
+ 
+for x in mycol.find():
+  print(x)

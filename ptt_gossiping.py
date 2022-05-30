@@ -1,7 +1,7 @@
 import scrapy
 import logging
 from scrapy.http import FormRequest
-from ptt.items import PttItem
+from .items import PttItem
 from datetime import datetime
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
